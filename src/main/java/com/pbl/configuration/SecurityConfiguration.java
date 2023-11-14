@@ -3,11 +3,13 @@ package com.pbl.configuration;
 import com.pbl.entity.RestBean;
 import com.pbl.entity.dto.Account;
 import com.pbl.entity.vo.response.AuthorizeVO;
+import com.pbl.filter.JwtAuthenticationFilter;
 import com.pbl.service.AccountService;
 import com.pbl.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.filters.RequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,7 +44,8 @@ public class SecurityConfiguration {
         @Resource
         JwtUtils utils;
 
-
+        @Resource
+        JwtAuthenticationFilter jwtAuthenticationFilter;
         /*
         * 这是注册了一个加密的编码
         */
@@ -61,7 +65,8 @@ public class SecurityConfiguration {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             return http
                     .authorizeHttpRequests(conf -> conf
-                            .requestMatchers("/api/auth/**", "/error").permitAll()
+                            .requestMatchers("/api/auth/**" ,"/error").permitAll()
+                            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             .anyRequest().authenticated()
                     )
                     .formLogin(conf -> conf
@@ -81,6 +86,7 @@ public class SecurityConfiguration {
                     .csrf(AbstractHttpConfigurer::disable)
                     .sessionManagement(conf -> conf
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
         }
 

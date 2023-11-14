@@ -19,15 +19,27 @@ spring:
       roles:
         - admin
         - use
+  web:
+    verify:
+      mail-limit: 60
+    flow:
+      period: 3
+      limit: 50
+      block: 30
+    cors:
+      origin: '*'
+      credentials: false
+      methods: '*'
 
-#
-#logging:
-#  level:
+
+logging:
+  level:
 #    org.springframework.amqp: DEBUG
+    org.springframework.security: DEBUG
 
 
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
-  port: 9090
+  port: 8080

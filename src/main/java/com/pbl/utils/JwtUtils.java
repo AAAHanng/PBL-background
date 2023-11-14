@@ -3,19 +3,21 @@ package com.pbl.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,7 +55,7 @@ public class JwtUtils {
      * @return 令牌
      */
     public String createJwt(UserDetails user, String username, int userId) {
-//        if(this.frequencyCheck(userId)) {
+        if(this.frequencyCheck(userId)) {
             Algorithm algorithm = Algorithm.HMAC256(key);
             Date expire = this.expireTime();
             return JWT.create()
@@ -66,9 +68,9 @@ public class JwtUtils {
                     .withExpiresAt(expire)
                     .withIssuedAt(new Date())
                     .sign(algorithm);
-//        } else {
-//            return null;
-//        }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -77,10 +79,10 @@ public class JwtUtils {
      * @param userId 用户ID
      * @return 是否通过频率检测
      */
-//    private boolean frequencyCheck(int userId){
-//        String key = Const.JWT_FREQUENCY + userId;
-//        return utils.limitOnceUpgradeCheck(key, limit_frequency, limit_base, limit_upgrade);
-//    }
+    private boolean frequencyCheck(int userId){
+        String key = Const.JWT_FREQUENCY + userId;
+        return utils.limitOnceUpgradeCheck(key, limit_frequency, limit_base, limit_upgrade);
+    }
 
     /**
      * 根据配置快速计算过期时间
@@ -119,6 +121,7 @@ public class JwtUtils {
     private String convertToken(String headerToken){
         if(headerToken == null || !headerToken.startsWith("Bearer "))
             return null;
+//        切割七个字符
         return headerToken.substring(7);
     }
 
@@ -144,5 +147,52 @@ public class JwtUtils {
      */
     private boolean isInvalidToken(String uuid){
         return Boolean.TRUE.equals(template.hasKey(Const.JWT_BLACK_LIST + uuid));
+    }
+
+    /**
+     * 将jwt对象中的内容封装为UserDetails
+     * @param jwt 已解析的Jwt对象
+     * @return UserDetails
+     */
+    public UserDetails toUser(DecodedJWT jwt) {
+        Map<String, Claim> claims = jwt.getClaims();
+        return User
+                .withUsername(claims.get("name").asString())
+                .password("******")
+                .authorities(claims.get("authorities").asArray(String.class))
+                .build();
+    }
+
+    /**
+     * 将jwt对象中的用户ID提取出来
+     * @param jwt 已解析的Jwt对象
+     * @return 用户ID
+     */
+    public Integer toId(DecodedJWT jwt) {
+        Map<String, Claim> claims = jwt.getClaims();
+        return claims.get("id").asInt();
+    }
+
+    /**
+     * 解析Jwt令牌
+     * @param headerToken 请求头中携带的令牌
+     * @return DecodedJWT
+     */
+    public DecodedJWT resolveJwt(String headerToken){
+        String token = this.convertToken(headerToken);
+        // 返回token
+        if(token == null) return null;
+        Algorithm algorithm = Algorithm.HMAC256(key);
+        JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+        try {
+            // 验证用户是否更改过
+            DecodedJWT verify = jwtVerifier.verify(token);
+            if(this.isInvalidToken(verify.getId())) return null;
+            Map<String, Claim> claims = verify.getClaims();
+            return new Date().after(claims.get("exp").asDate()) ? null : verify;
+        } catch (JWTVerificationException e) {
+            // 手动捕捉异常
+            return null;
+        }
     }
 }
