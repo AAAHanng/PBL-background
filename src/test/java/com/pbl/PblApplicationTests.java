@@ -1,5 +1,6 @@
 package com.pbl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pbl.entity.dto.Account;
 import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
@@ -22,6 +23,11 @@ class PblApplicationTests {
     @Test
     void encoded(){
         System.out.println(new BCryptPasswordEncoder().encode("123456"));
+    }
+
+    @Test
+    void datasource(){
+        System.out.println(service.findAccountByStudentID("2021402030611"));
     }
 
 }

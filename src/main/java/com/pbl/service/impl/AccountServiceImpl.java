@@ -2,6 +2,7 @@ package com.pbl.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pbl.entity.dto.Account;
+import com.pbl.entity.vo.response.AccountVO;
 import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
 import org.springframework.security.core.userdetails.User;
@@ -39,5 +40,15 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return this.query()
                 .eq("username", text).or()
                 .one();
+    }
+
+    @Override
+    public AccountVO findAccountByStudentID(String text) {
+        Account account=this.query()
+                .eq("StudentID",text)
+                .one();
+        AccountVO vo = account.asViewObject(AccountVO.class);
+        return vo;
+
     }
 }

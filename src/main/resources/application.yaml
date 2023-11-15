@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/PBL
@@ -32,10 +31,10 @@ spring:
       methods: '*'
 
 
-logging:
-  level:
+#logging:
+#  level:
 #    org.springframework.amqp: DEBUG
-    org.springframework.security: DEBUG
+#    org.springframework.security: DEBUG
 
 
 #mybatis-plus:
