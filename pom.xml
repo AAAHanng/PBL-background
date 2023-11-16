@@ -97,6 +97,12 @@
             <version>2.1.0</version>
         </dependency>
 
+        <!-- Springdoc boot validation 用于接口验证 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

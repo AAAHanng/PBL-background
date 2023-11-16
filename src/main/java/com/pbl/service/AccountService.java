@@ -10,4 +10,5 @@ public interface AccountService extends IService<Account>, UserDetailsService {
 
     AccountVO findAccountByStudentID(String text);
 
+    String updateContactInfo(String StudentID,String phone,String email,String wechat,String qq);
 }

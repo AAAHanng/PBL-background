@@ -27,7 +27,7 @@ class PblApplicationTests {
 
     @Test
     void datasource(){
-        System.out.println(service.findAccountByStudentID("2021402030611"));
+        System.out.println(service.updateContactInfo("2021402030611","13611111111",null,null,null));
     }
 
 }

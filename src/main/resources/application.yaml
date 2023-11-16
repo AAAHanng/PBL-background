@@ -35,10 +35,12 @@ spring:
 #  level:
 #    org.springframework.amqp: DEBUG
 #    org.springframework.security: DEBUG
-
+#        com:
+#          mybatis plus=debug:
 
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 server:
   port: 8080
