@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pbl.entity.dto.Account;
 import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
+import com.pbl.service.CourseService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,9 @@ class PblApplicationTests {
 
     @Resource
     AccountService service;
+
+    @Resource
+    CourseService service1;
 
     @Test
     void contextLoads() {
@@ -30,4 +34,8 @@ class PblApplicationTests {
         System.out.println(service.updateContactInfo("2021402030611","13611111111",null,null,null));
     }
 
+    @Test
+    void datasourceCourse(){
+        service1.updateStatus("2021402030602","2");
+    }
 }

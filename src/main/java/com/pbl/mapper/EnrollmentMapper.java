@@ -1,9 +1,9 @@
 package com.pbl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.pbl.entity.dto.Course;
+import com.pbl.entity.dto.Enrollment;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface CourseMapper extends BaseMapper<Course> {
+public interface EnrollmentMapper extends BaseMapper<Enrollment> {
 }

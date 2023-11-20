@@ -1,6 +1,9 @@
 package com.pbl.controller;
 
 
+import com.pbl.entity.RestBean;
+import com.pbl.entity.dto.Course;
+import com.pbl.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Validated
 @RestController
@@ -24,7 +29,7 @@ public class CourseController {
     /**
      * 用户登录主页之后课程列表
      * @param // null
-     * @return CourseVO对象
+     * @return 课程对象
      */
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "测试成功"),
@@ -33,8 +38,42 @@ public class CourseController {
     @Operation(summary = "全部课程")   //接口功能描述
     @ResponseBody
     @GetMapping("/contact")
-    public String contact(){
-
-        return "hello world";
+    public RestBean<List<Course>> contact(){
+        return RestBean.success(service.FindAllCourse());
     }
+
+    /**
+     * 用户登录主页之后课程列表
+     * @param // StudentID
+     * @return 课程对象
+     */
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "测试成功"),
+            @ApiResponse(responseCode = "500", description = "测试失败")   //不同返回状态码描述
+    })
+    @Operation(summary = "全部课程")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/alContact")
+    public RestBean<List<Course>> FindALCourse(String studentID){
+        return RestBean.success(service.FindALCourse(studentID));
+    }
+
+    /**
+     * 用户登录主页之后课程列表
+     *
+     * @param // StudentID
+     * @return 课程对象
+     */
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "测试成功"),
+            @ApiResponse(responseCode = "500", description = "测试失败")   //不同返回状态码描述
+    })
+    @Operation(summary = "发送课程请求")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/CourseRequest")
+    public RestBean<Void> submitCourseRequest(String courseID , String StudentID){
+        return RestBean.success(service.submitCourseRequest(courseID,StudentID));
+    }
+
+
 }

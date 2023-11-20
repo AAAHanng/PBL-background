@@ -19,7 +19,7 @@ public class Const {
     //请求自定义属性
     public final static String ATTR_USER_ID = "userId";
     //消息队列
-    public final static String MQ_MAIL = "mail";
+    public final static String COURSE_REQUEST = "course";
     //用户角色
     public final static String ROLE_DEFAULT = "user";
 }
