@@ -1,16 +1,13 @@
 package com.pbl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pbl.entity.dto.Course;
 import com.pbl.entity.dto.Enrollment;
 import com.pbl.mapper.CourseMapper;
 import com.pbl.mapper.EnrollmentMapper;
 import com.pbl.service.CourseService;
-import com.pbl.utils.Const;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
@@ -35,6 +32,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Resource
     AmqpTemplate rabbitTemplate;
 
+
+    /**
+     * 查询所有课程
+     * @return 课程对象
+     */
     @Override
     public List FindAllCourse() {
         List<Course> list = courseMapper.selectList(null);
@@ -42,6 +44,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         return list;
     }
 
+    /**
+     * 找到所有课程by 学号
+     * @param // StudentID
+     * @return 课程对象 列表
+     */
     @Override
     public List<Course> FindALCourse(String studentID) {
         // 查询符合条件的 Enrollment 记录
@@ -63,32 +70,180 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         return courseMapper.selectList(courseQueryWrapper);
     }
 
+    /**
+     * 学生通过学号课程请求选课
+     *
+     * @param // StudentID
+     * @return 课程对象
+     */
+    @Override
+    public String submitCourseRequest(String courseID, String studentID) {
+        if (!enrollmentExists(studentID, courseID)) {
+            Course Grade = this.query()
+                    .eq("courseid", courseID)
+                    .one();
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            Enrollment enrollment = new Enrollment(
+                    null, studentID, courseID, currentDateTime, Grade.getCredits(), "等待"
+            );
+
+            enrollmentMapper.insert(enrollment);
+            return "插入成功";
+        } else {
+            return "已经选了";
+        }
+
+//        这段是启用rabbitmq 用作与流量销峰
+//        Map<String, Object> data = Map.of("courseID", courseID, "studentID", studentID);
+//        rabbitTemplate.convertAndSend(Const.COURSE_REQUEST, data);
+    }
+
+
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return 课程对象列表
+     */
+    @Override
+    public List<Map<String, Object>> TeacherClassList(String courseID,String type) {List<Map<String, Object>> enrollmentList = enrollmentMapper.getEnrollmentsByCourseId("1");
+        // 根据Status字段分组
+        Map<String, List<Map<String, Object>>> groupedByStatus = enrollmentList.stream()
+                .collect(Collectors.groupingBy(result -> result.get("Status").toString()));
+
+        switch (type) {
+            case "已选课":
+                return groupedByStatus.getOrDefault("已选课", Collections.emptyList());
+            case "等待":
+                return groupedByStatus.getOrDefault("等待", Collections.emptyList());
+            default:
+                return enrollmentList;
+        }
+
+    }
 
     @Override
-    public Void submitCourseRequest(String courseID, String studentID) {
-        Course Grade = this.query()
-                .eq("courseid", courseID)
-                .one();
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        Enrollment enrollment = new Enrollment(
-                null, studentID, courseID, currentDateTime, Grade.getCredits(), "等待"
-        );
-        enrollmentMapper.insert(enrollment);
-        Map<String, Object> data = Map.of("courseID", courseID, "studentID", studentID);
-        rabbitTemplate.convertAndSend(Const.COURSE_REQUEST, data);
+    public String TeacherChange(String studentID, String courseID, String type) {
+        if(enrollmentExists(studentID,courseID)){
+            if(type=="access"){
+                updateStatus(studentID,courseID);
+            }else{
+                deleteEnrollment(studentID,courseID);
+            }
+        }else{
+            return "没有此用户";
+        }
         return null;
     }
 
-    public Void deleteEnrollment(String studentId, String courseId) {
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+
+    @Override
+    public String createCourse(Course course) {
+        try {
+            this.save(course);
+            return "课程创建成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程创建失败，可能出现错误：";
+        }
+    }
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public Course getCourseById(String courseId) {
+        try {
+            Course course = this.getById(courseId);
+            if (course != null) {
+                return course;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return null;
+        }
+    }
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public String updateCourse(Course course) {
+        try {
+            this.updateById(course);
+            return "课程更新成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程更新失败，可能出现错误：";
+        }
+    }
+
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public String deleteCourse(String courseId) {
+        try {
+            this.removeById(courseId);
+            return "课程删除成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程删除失败，可能出现错误：" ;
+        }
+    }
+
+
+    /**
+     * 查看数据是否存在
+     * @param // Studentid courseid
+     * @return // boolean
+     * */
+    private boolean enrollmentExists(String studentID,String courseID) {
+        // Query the database to check if the enrollment already exists
+        QueryWrapper<Enrollment> selectWrapper = new QueryWrapper<>();
+        selectWrapper.eq("studentID", studentID)
+                .eq("courseid", courseID);
+        Enrollment result = enrollmentMapper.selectOne(selectWrapper);
+        return result != null;
+    }
+
+    /**
+     * 通过学号 课程号删除选课信息
+     *
+     * @param // StudentID
+     * @return 课程对象
+     */
+    private String deleteEnrollment(String studentId, String courseId) {
         try {
             QueryWrapper<Enrollment> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("StudentID", studentId).eq("CourseID", courseId);
             int deletedRows = enrollmentMapper.delete(queryWrapper);
 
             if (deletedRows > 0) {
-                System.out.println("删除成功.");
+                return "删除成功";
             } else {
-                System.out.println("没有匹配的数据.");
+                return "没有匹配的数据";
             }
         } catch (Exception e) {
             System.err.println("错误删除: " + e.getMessage());
@@ -97,8 +252,13 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         return null;
     }
 
-
-    public Void updateStatus(String studentId, String courseId){
+    /**
+     * 通过学号课程号 更新 选课status 状态
+     *
+     * @param // StudentID
+     * @return 课程对象
+     */
+    private String updateStatus(String studentId, String courseId){
         try {
             // 创建更新条件
             UpdateWrapper<Enrollment> updateWrapper = new UpdateWrapper<>();
@@ -108,9 +268,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             int rowsAffected = enrollmentMapper.update(null, updateWrapper.set("status", "成功选课"));
 
             if (rowsAffected > 0) {
-                System.out.println("更新成功");
+                return "更新成功";
             } else {
-                System.out.println("更新失败，未找到符合条件的记录");
+                return "更新失败，未找到符合条件的记录";
             }
         } catch (Exception e) {
             System.err.println("错误删除: " + e.getMessage());

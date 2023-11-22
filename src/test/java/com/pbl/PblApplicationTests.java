@@ -36,6 +36,6 @@ class PblApplicationTests {
 
     @Test
     void datasourceCourse(){
-        service1.updateStatus("2021402030602","2");
+        System.out.println(service.getUserById("2021402030601"));
     }
 }

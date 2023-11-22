@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.pbl.entity.dto.Course;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CourseService extends IService<Course>{
 
@@ -11,9 +12,20 @@ public interface CourseService extends IService<Course>{
 
     List <Course> FindALCourse(String StudentID);
 
-    Void submitCourseRequest(String courseID, String studentID);
+    String submitCourseRequest(String courseID, String studentID);
 
-    Void deleteEnrollment(String studentId, String courseId);
+    List<Map<String, Object>> TeacherClassList(String courseID,String type);
 
-    Void updateStatus(String studentId, String courseId);
+    String TeacherChange(String studentID, String courseID , String type);
+    String createCourse(Course course);
+
+
+    Course getCourseById(String courseId);
+
+
+    String updateCourse(Course course);
+
+
+    String deleteCourse(String courseId);
+
 }

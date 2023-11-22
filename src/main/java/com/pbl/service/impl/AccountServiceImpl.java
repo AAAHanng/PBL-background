@@ -1,9 +1,12 @@
 package com.pbl.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pbl.entity.dto.Account;
+import com.pbl.entity.dto.Course;
 import com.pbl.entity.vo.response.AccountVO;
 import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
@@ -84,6 +87,87 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         } catch (Exception e) {
             e.printStackTrace(); // 在实际应用中，根据需求进行日志记录或其他处理
             return "修改失败";
+        }
+    }
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+
+    @Override
+    public String createUser(Account account) {
+        try {
+            this.save(account);
+            return "用户创建成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "用户创建失败，可能出现错误：";
+        }
+    }
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public Account getUserById(String studentid) {
+        try {
+            // 使用 LambdaQueryWrapper 来构建查询条件
+            LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Account::getStudentid, studentid);
+            return this.getOne(wrapper);
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return null;
+        }
+    }
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public String updateUser(Account account) {
+        try {
+            UpdateWrapper<Account> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("studentID", account.getStudentid());
+
+            this.update(account, updateWrapper);
+
+            return "课程更新成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程更新失败，可能出现错误：";
+        }
+    }
+
+
+    /**
+     * 根据课程号
+     *
+     * @param // CourseID
+     * @return String状态
+     */
+    @Override
+    public String deleteUser(String studentID) {
+        try {
+            // 使用 LambdaQueryWrapper 来构建查询条件
+            LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Account::getStudentid, studentID);
+
+            // 调用 MyBatis Plus 的 remove 方法来执行删除操作
+            this.remove(wrapper);
+            return "课程删除成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程删除失败，可能出现错误：" ;
         }
     }
 

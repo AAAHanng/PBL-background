@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 @RabbitListener(queues = "course")
@@ -20,19 +21,20 @@ public class CourseQueueListener {
 
         String studentID = data.get("studentID").toString();
         String courseID = data.get("courseId").toString();
-
-        // 老师处理选课信息
-        boolean approval = false; // 根据实际业务逻辑决定是否同意选课
-
-
-        // 更新数据库状态或删除信息
-        if (approval) {
-            // 更新数据库状态为同意
-            courseService.updateStatus(studentID,courseID);
-        } else {
-            // 不同意则删除数据库中的信息
-            courseService.deleteEnrollment(studentID,courseID);
-        }
+//        System.out.println(studentID);
+//        System.out.println(courseID);
+//        // 老师处理选课信息
+//        String approval = data.get("approval").toString(); // 根据实际业务逻辑决定是否同意选课
+//
+//
+//        // 更新数据库状态或删除信息
+//        if (Objects.equals(approval, "TRUE")) {
+//            // 更新数据库状态为同意
+//            courseService.updateStatus(studentID,courseID);
+//        } else {
+//            // 不同意则删除数据库中的信息
+//            courseService.deleteEnrollment(studentID,courseID);
+//        }
     }
 
 }

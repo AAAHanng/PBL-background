@@ -28,7 +28,7 @@ public class Course implements Serializable {
     /**
      * 课程ID，唯一标识课程
      */
-    @TableId(value = "CourseID", type = IdType.AUTO)
+    @TableId(value = "courseid", type = IdType.AUTO)
     private Integer courseID;
 
     /**
