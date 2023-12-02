@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Objects;
-
-@Component
-@RabbitListener(queues = "course")
+//
+//@Component
+//@RabbitListener(queues = "course")
 public class CourseQueueListener {
 
     @Resource

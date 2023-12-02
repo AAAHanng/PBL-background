@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
  * */
 @Configuration
 public class RabbitConfiguration {
-    @Bean("courseQueue")
-    public Queue queue(){
-        return QueueBuilder
-                .durable("course")
-                .build();
-    }
+//    @Bean("courseQueue")
+//    public Queue queue(){
+//        return QueueBuilder
+//                .durable("course")
+//                .build();
+//    }
 
 }
