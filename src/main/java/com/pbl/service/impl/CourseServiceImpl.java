@@ -9,7 +9,6 @@ import com.pbl.mapper.CourseMapper;
 import com.pbl.mapper.EnrollmentMapper;
 import com.pbl.service.CourseService;
 import jakarta.annotation.Resource;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +28,8 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Resource
     CourseMapper courseMapper;
 
-    @Resource
-    AmqpTemplate rabbitTemplate;
+//    @Resource
+//    AmqpTemplate rabbitTemplate;
 
 
     /**
@@ -127,11 +126,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Override
     public String TeacherChange(String studentID, String courseID, String type) {
         if(enrollmentExists(studentID,courseID)){
-            if(type=="access"){
-                updateStatus(studentID,courseID);
-            }else{
-                deleteEnrollment(studentID,courseID);
-            }
+                updateStatus(studentID,courseID,type);
         }else{
             return "没有此用户";
         }
@@ -167,11 +162,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public Course getCourseById(String courseId) {
         try {
             Course course = this.getById(courseId);
-            if (course != null) {
-                return course;
-            } else {
-                return null;
-            }
+            return course;
         } catch (Exception e) {
             e.printStackTrace(); // 记录日志
             return null;
@@ -241,6 +232,32 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     }
 
 
+    @Override
+    public List<Map<String, Object>> getStudentCourseInfoByStudentID(String studentID , int type) {
+        List<Map<String, Object>> AllList = courseMapper.getStudentCourseInfoByStudentID(studentID);
+        if (type == 1) {
+            // 过滤掉 status 为等待的记录
+            return AllList.stream()
+                    .filter(enrollment -> !"等待".equals(enrollment.get("Status")))
+                    .collect(Collectors.toList());
+        } else if (type == 2) {
+            // 过滤掉 status 为已选课的记录
+            return AllList.stream()
+                    .filter(enrollment -> !"已选课".equals(enrollment.get("Status")))
+                    .collect(Collectors.toList());
+        } else {
+            // type 为 3，不进行过滤，返回原始列表
+            return AllList;
+        }
+    }
+
+    @Override
+    public List<Course> getAllCourse() {
+        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+        return courseMapper.selectList(queryWrapper);
+    }
+
+
     /**
      * 查看数据是否存在
      * @param // Studentid courseid
@@ -285,14 +302,14 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
      * @param // StudentID
      * @return 课程对象
      */
-    private String updateStatus(String studentId, String courseId){
+    private String updateStatus(String studentId, String courseId,String type){
         try {
             // 创建更新条件
             UpdateWrapper<Enrollment> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("StudentID", studentId)
                     .eq("courseID", courseId);
-            // 执行更新操作
-            int rowsAffected = enrollmentMapper.update(null, updateWrapper.set("status", "成功选课"));
+            // 执行更新操
+            int rowsAffected = enrollmentMapper.update(null, updateWrapper.set("status",type));
 
             if (rowsAffected > 0) {
                 return "更新成功";

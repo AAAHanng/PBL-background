@@ -36,7 +36,7 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI springDocOpenAPI() {
         return new OpenAPI().info(new Info()
-                .title("PBL在线管理 - 在线API接口文档")   //设置API文档网站标题
+                .title("PBL在线管理 - 在线API接口文档 注：接口都没有接口校验注意传参 ps（不想写）")   //设置API文档网站标题
                 .description("这是一个PbL的后端API文档，欢迎前端人员查阅！") //网站介绍
                 .version("1.0")   //当前API版本
                 .license(new License().name("By AAAhang")  //遵循的协议，这里拿来写其他的也行
@@ -64,7 +64,7 @@ public class SwaggerConfiguration {
                         .tags(List.of("登录校验相关"))
                         .summary("登录验证接口")
                         .addParametersItem(new QueryParameter()
-                                .name("username")
+                                .name("StudentId")
                                 .required(true)
                         )
                         .addParametersItem(new QueryParameter()

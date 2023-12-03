@@ -36,18 +36,29 @@ public interface CourseMapper extends BaseMapper<Course> {
         int updateCourseDescription(@Param("courseId") String courseId, @Param("description") String description);
 
 
-        @Select("SELECT U.username, U.studentID, U.classes, C.coursename " +
+        @Select("SELECT U.username, U.studentID, U.classes, C.coursename, C.courseid, E.Status " +
                 "FROM User U " +
                 "JOIN (" +
-                "   SELECT E.StudentID, E.CourseID " +
-                "   FROM Enrollment E " +
-                "   WHERE E.courseID IN (" +
-                "       SELECT CourseID " +
-                "       FROM Enrollment " +
-                "       WHERE studentID = #{studentID}" + // 使用 MyBatis 参数占位符
-                "   )" +
-                ") AS EC ON U.studentID = EC.StudentID " +
-                "JOIN Course C ON EC.CourseID = C.CourseID " +
+                "   SELECT EC.StudentID, EC.CourseID, EC.Status " +
+                "   FROM (" +
+                "       SELECT E.StudentID, E.CourseID, E.Status " +
+                "       FROM Enrollment E " +
+                "       WHERE E.courseID IN (" +
+                "           SELECT CourseID " +
+                "           FROM Enrollment " +
+                "           WHERE studentID = #{studentID}" +
+                "       )" +
+                "   ) AS EC" +
+                ") AS E ON U.studentID = E.StudentID " +
+                "JOIN Course C ON E.CourseID = C.CourseID " +
                 "WHERE U.identification = 1")
         List<Map<String, Object>> getUserCoursesWithStudentId(String studentID);
+
+        @Select("SELECT " +
+                "e.studentid, e.courseid, e.grade, e.Status, " +
+                "c.coursename, c.location, c.coursetime, c.maxcapacity, c.description, c.credits, c.teacher " +
+                "FROM Enrollment e " +
+                "JOIN Course c ON e.courseid = c.courseid " +
+                "WHERE e.studentid = #{studentID}")
+        List<Map<String, Object>> getStudentCourseInfoByStudentID(String studentID);
 }

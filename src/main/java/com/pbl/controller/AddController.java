@@ -1,6 +1,7 @@
 package com.pbl.controller;
 
 import com.pbl.entity.RestBean;
+import com.pbl.entity.dto.Course;
 import com.pbl.service.AccountService;
 import com.pbl.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -96,7 +97,6 @@ public class AddController {
 
     /**
      * 所有课程库
-     *
      * @param // null
      * @return 课程对象
      */
@@ -110,5 +110,39 @@ public class AddController {
     public RestBean<List<Map<String, Object>>> getRequestList(HttpServletRequest request){
         String teacherID=request.getParameter("teacherID");
         return RestBean.success(courseService.getRequestList(teacherID));
+    }
+
+    /**
+     * 返回所有课程
+     *
+     * @param // null
+     * @return 课程对象
+     */
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "测试成功"),
+            @ApiResponse(responseCode = "500", description = "测试失败")   //不同返回状态码描述
+    })
+    @Operation(summary = "学生端接口 返回所有课程表 ",description = "ps所有课程")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/allCourse")
+    public RestBean<List<Course>> getAllCourse(){
+        return RestBean.success(courseService.getAllCourse());
+    }
+
+    /**
+     * 根据学号查看所有选课的状态
+     *
+     * @param // null
+     * @return 课程对象
+     */
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "测试成功"),
+            @ApiResponse(responseCode = "500", description = "测试失败")   //不同返回状态码描述
+    })
+    @Operation(summary = "学生端接口 根据学号查找 type为查找总类 ",description = "type为1 则返回已经成功选课列表 为0 则返回还在等待选课的列表 为3 则返回所有状态")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getStudentCourseInfoByStudentID")
+    public RestBean<List<Map<String, Object>>> getStudentCourseInfoByStudentID(String studentID, int type){
+        return RestBean.success(courseService.getStudentCourseInfoByStudentID(studentID,type));
     }
 }

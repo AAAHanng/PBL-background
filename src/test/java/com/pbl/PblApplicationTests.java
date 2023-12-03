@@ -21,7 +21,7 @@ class PblApplicationTests {
 
     @Test
     void contextLoads() {
-        service.findAccountByNameOrEmail("2021402030601");
+        service.findAccountByNameOrEmail("2021402030609");
     }
 
     @Test
@@ -36,6 +36,6 @@ class PblApplicationTests {
 
     @Test
     void datasourceCourse(){
-        System.out.println(service1.getCourses("王丽"));
+        System.out.println(service1.getStudentCourseInfoByStudentID("2021402030609",1));
     }
 }

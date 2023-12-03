@@ -1,12 +1,9 @@
 package com.pbl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pbl.entity.dto.Account;
-import com.pbl.entity.dto.Course;
 import com.pbl.entity.vo.response.AccountVO;
 import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
@@ -39,6 +36,18 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
                 .withUsername(studentID)
                 .password(account.getPassword())
                 .build();
+    }
+
+    @Override
+    public String findAccountByStudent(String text) {
+        Account account = findAccountByNameOrEmail(text);
+        if (account.getIdentification()==1){
+            return "student";
+        }else if (account.getIdentification()==2) {
+            return "admin";
+        }else{
+            return "teacher";
+        }
     }
 
     /**

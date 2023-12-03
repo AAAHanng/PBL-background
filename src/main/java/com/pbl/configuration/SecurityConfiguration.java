@@ -126,6 +126,7 @@ public class SecurityConfiguration {
                     vo.setExpire(utils.expireTime());
                     vo.setToken(jwt);
                     vo.setUsername(account.getUsername());
+                    vo.setIdentity(service.findAccountByStudent(user.getUsername()));
                     writer.write(RestBean.success(vo).asJsonString());
                 }
             }

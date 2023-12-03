@@ -34,6 +34,9 @@ spring:
       origin: '*'
       credentials: false
       methods: '*'
+#  data:
+#    redis:
+#      host: app_redis
 
 #logging:
 #  level:

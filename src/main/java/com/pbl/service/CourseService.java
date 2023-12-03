@@ -38,4 +38,7 @@ public interface CourseService extends IService<Course>{
 
     List<Map<String, Object>> getRequestList(String studentID);
 
+    List<Map<String, Object>>getStudentCourseInfoByStudentID(String studentID ,int type);
+
+    List<Course> getAllCourse();
 }

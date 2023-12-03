@@ -12,4 +12,5 @@ public class AuthorizeVO {
     String username;
     String token;
     Date expire;
+    String identity;
 }

@@ -14,12 +14,6 @@
  Date: 03/12/2023 10:02:40
 */
 
-CREATE DATABASE IF NOT EXISTS PBL;
-USE PBL;
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
 -- ----------------------------
 -- Table structure for Course
 -- ----------------------------
