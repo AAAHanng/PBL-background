@@ -34,7 +34,9 @@ spring:
       origin: '*'
       credentials: false
       methods: '*'
-
+  data:
+    redis:
+      host:
 
 #logging:
 #  level:
@@ -46,6 +48,7 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    default-string-type: UTF-8
 
 server:
   port: 8080

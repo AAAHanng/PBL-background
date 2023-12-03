@@ -36,6 +36,6 @@ class PblApplicationTests {
 
     @Test
     void datasourceCourse(){
-        System.out.println(service.getUserById("2021402030601"));
+        System.out.println(service1.getCourses("王丽"));
     }
 }

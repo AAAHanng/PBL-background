@@ -213,6 +213,33 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         }
     }
 
+    @Override
+    public  List<Map<String, Object>> getCoursesForStudents() {
+        return courseMapper.getCoursesForStudents();
+    }
+
+    @Override
+    public List<Map<String, Object>> getCourses(String teacher) {
+        return courseMapper.getCourseByName(teacher);
+    }
+
+    @Override
+    public List<Map<String, Object>> getStudentInfo(String teacher) {
+        return courseMapper.getStudentInfo(teacher);
+    }
+
+    @Override
+    public String updateCourseDescription(String courseId,String description) {
+        int affectedRows = courseMapper.updateCourseDescription(courseId ,description);
+
+        return (affectedRows > 0) ? "修改成功" : "修改失败";
+    }
+
+    @Override
+    public List<Map<String, Object>> getRequestList(String studentID) {
+        return courseMapper.getUserCoursesWithStudentId(studentID);
+    }
+
 
     /**
      * 查看数据是否存在

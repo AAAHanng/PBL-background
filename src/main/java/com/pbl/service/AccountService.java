@@ -19,5 +19,7 @@ public interface AccountService extends IService<Account>, UserDetailsService {
 
     String updateUser(Account account);
 
-    String deleteUser(String studentID);
+    String deleteUser(String teacher);
+
+
 }

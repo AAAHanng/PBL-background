@@ -28,4 +28,14 @@ public interface CourseService extends IService<Course>{
 
     String deleteCourse(String courseId);
 
+    List<Map<String, Object>> getCoursesForStudents();
+
+    List<Map<String, Object>> getCourses(String username);
+
+    List<Map<String, Object>> getStudentInfo(String teacher);
+
+    String updateCourseDescription(String courseid ,String description);
+
+    List<Map<String, Object>> getRequestList(String studentID);
+
 }
