@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class AddController {
     @Operation(summary = "课程-课程管理 谢lf",description = "谢lf  输入为老师姓名")   //接口功能描述
     @ResponseBody
     @PostMapping("/getCourses")
-    public  List<Map<String, Object>> getCourses(String teacher){
+    public  List<Map<String, Object>> getCourses( String teacher){
 
         return courseService.getCourses(teacher);
     }
@@ -105,8 +106,9 @@ public class AddController {
     })
     @Operation(summary = "申请列表 谢lf",description = "谢lf  输入为老师id")   //接口功能描述
     @ResponseBody
-    @PostMapping("/getRequestList")
-    public RestBean<List<Map<String, Object>>> getRequestList(String teacherID){
+    @GetMapping("/getRequestList")
+    public RestBean<List<Map<String, Object>>> getRequestList(HttpServletRequest request){
+        String teacherID=request.getParameter("teacherID");
         return RestBean.success(courseService.getRequestList(teacherID));
     }
 }

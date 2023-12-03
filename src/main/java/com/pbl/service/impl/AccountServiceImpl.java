@@ -26,17 +26,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
     /**
      * 从数据库中通过用户名或邮箱查找用户详细信息
-     * @param username 用户名
+     * @param // username 用户名
      * @return 用户详细信息
      * @throws UsernameNotFoundException 如果用户未找到则抛出此异常
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = this.findAccountByNameOrEmail(username);
+    public UserDetails loadUserByUsername(String studentID) throws UsernameNotFoundException {
+        Account account = this.findAccountByNameOrEmail(studentID);
         if(account == null)
             throw new UsernameNotFoundException("用户名或密码错误");
         return User
-                .withUsername(username)
+                .withUsername(studentID)
                 .password(account.getPassword())
                 .build();
     }
@@ -48,7 +48,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
      */
     public Account findAccountByNameOrEmail(String text){
         return this.query()
-                .eq("username", text).or()
+                .eq("studentid", text).or()
                 .one();
     }
 

@@ -9,6 +9,7 @@ import com.pbl.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.filters.RequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,6 +33,7 @@ import java.io.PrintWriter;
     Spring Security配置类
 */
 @Configuration
+@Slf4j
 @EnableWebSecurity
 public class SecurityConfiguration {
 
