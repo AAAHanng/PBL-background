@@ -56,12 +56,13 @@ public class InfoController {
     @PutMapping("/update-contact-info")
     public RestBean<Void> updateContactInfo(
             @RequestParam(name = "StudentID") String StudentID,
-            @RequestParam(name = "phone") @Pattern(regexp = "^1[3456789]\\d{9}$") String phone,
+            @RequestParam(name = "phone" ,required = false) @Pattern(regexp = "^1[3456789]\\d{9}$") String phone,
             @RequestParam(name = "email", required = false) @Email String email,
             @RequestParam(name = "wechat", required = false) String wechat,
-            @RequestParam(name = "qq", required = false) @Pattern(regexp = "^[0-9]{5,12}$") String qq
+            @RequestParam(name = "qq", required = false) @Pattern(regexp = "^[0-9]{5,12}$") String qq,
+            @RequestParam(name = "bio", required = false) String bio
     ) {
-        String message = service.updateContactInfo(StudentID, phone, email, wechat, qq);
+        String message = service.updateContactInfo(StudentID, phone, email, wechat, qq,bio);
         return (message == null) ? RestBean.failure(401, "更改信息失败") : RestBean.success();
     }
 }

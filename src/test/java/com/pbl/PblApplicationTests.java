@@ -21,7 +21,7 @@ class PblApplicationTests {
 
     @Test
     void contextLoads() {
-        service.findAccountByNameOrEmail("2021402030609");
+        service.findAccountByNameOrEmail("2021402030601");
     }
 
     @Test
@@ -29,10 +29,6 @@ class PblApplicationTests {
         System.out.println(new BCryptPasswordEncoder().encode("123456"));
     }
 
-    @Test
-    void datasource(){
-        System.out.println(service.updateContactInfo("2021402030611","13611111111",null,null,null));
-    }
 
     @Test
     void datasourceCourse(){

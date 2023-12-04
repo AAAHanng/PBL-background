@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/PBL
     username: root
-    password: liuhang12
+    password: 111
     driver-class-name: com.mysql.cj.jdbc.Driver
   security:
     jwt:
@@ -49,6 +49,3 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     default-string-type: UTF-8
-
-server:
-  port: 8080

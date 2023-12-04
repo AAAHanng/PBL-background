@@ -1,20 +1,22 @@
-version: "3.9"  #首先是版本号，别乱写，这个是和Docker版本有对应的
+version: "3.3"  #首先是版本号，别乱写，这个是和Docker版本有对应的
 services:   #services里面就是我们所有需要进行编排的服务了
   spring:   #服务名称，随便起
     container_name: app_spring  #一会要创建的容器名称
-    image: springtest:latest
+    build:
+      context: ./spring-data
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:8080
+    depends_on:
+      - mysql
+    restart: always
   mysql:
     container_name: app_mysql
-    image: mysqlpbl:latest
+    build:
+      context: ./mysql-data
+      dockerfile: Dockerfile
     ports:
       - "3306:3306"
-    environment: #这里我们通过环境变量配置MySQL的root账号和密码
-      MYSQL_ROOT_HOST: '%'   #登陆的主机，这里直接配置为'%'
-      MYSQL_ROOT_PASSWORD: '123456'    #MySQL root账号的密码，别设定得太简单了
-      MYSQL_DATABASE: 'study'    #在启动时自动创建的数据库
-      TZ: 'Asia/Shanghai'    #时区
   redis:
     container_name: app_redis
     image: redis:latest

@@ -106,7 +106,7 @@ public class AddController {
     })
     @Operation(summary = "申请列表 谢lf",description = "谢lf  输入为老师id")   //接口功能描述
     @ResponseBody
-    @GetMapping("/getRequestList")
+    @PostMapping("/getRequestList")
     public RestBean<List<Map<String, Object>>> getRequestList(HttpServletRequest request){
         String teacherID=request.getParameter("teacherID");
         return RestBean.success(courseService.getRequestList(teacherID));

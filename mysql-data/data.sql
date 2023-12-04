@@ -13,7 +13,8 @@
 
  Date: 03/12/2023 10:02:40
 */
-
+CREATE DATABASE IF NOT EXISTS PBL;
+USE PBL;
 -- ----------------------------
 -- Table structure for Course
 -- ----------------------------

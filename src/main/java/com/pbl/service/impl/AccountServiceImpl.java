@@ -78,7 +78,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
      * @return
      */
     @Override
-    public String updateContactInfo(String StudentID, String phone, String email, String wechat, String qq) {
+    public String updateContactInfo(String StudentID, String phone, String email, String wechat, String qq,String bio) {
         try {
 
             if (findAccountByStudentID(StudentID) == null) {
@@ -89,7 +89,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
                         .set("phone", phone)
                         .set("email", email)
                         .set("wechat", wechat)
-                        .set("qq", qq);
+                        .set("qq", qq)
+                        .set("bio",bio);
                 mapper.update(null, updateWrapper);
                 return "修改成功";
             }

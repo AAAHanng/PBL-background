@@ -64,7 +64,7 @@ public class SwaggerConfiguration {
                         .tags(List.of("登录校验相关"))
                         .summary("登录验证接口")
                         .addParametersItem(new QueryParameter()
-                                .name("StudentId")
+                                .name("username")
                                 .required(true)
                         )
                         .addParametersItem(new QueryParameter()
