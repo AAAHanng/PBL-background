@@ -14,7 +14,7 @@ import java.util.Map;
 public interface CourseMapper extends BaseMapper<Course> {
 
 
-        @Select("SELECT Course.teacher, Course.coursename, Course.coursetime, Course.location, User.classes " +
+        @Select("SELECT Course.courseid ,Course.teacher, Course.coursename, Course.coursetime, Course.location, User.classes " +
                 "FROM Course " +
                 "LEFT JOIN Enrollment ON Course.CourseID = Enrollment.CourseID " +
                 "LEFT JOIN User ON Enrollment.StudentID = User.studentID " +

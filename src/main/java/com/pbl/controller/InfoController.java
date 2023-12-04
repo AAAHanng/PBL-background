@@ -53,7 +53,7 @@ public class InfoController {
      * @return RestBean 对象
      */
     @Operation(summary = "更新用户联系信息", description = "更新用户的手机、邮件、微信和 QQ 号")
-    @PutMapping("/update-contact-info")
+    @GetMapping("/update-contact-info")
     public RestBean<Void> updateContactInfo(
             @RequestParam(name = "StudentID") String StudentID,
             @RequestParam(name = "phone" ,required = false) @Pattern(regexp = "^1[3456789]\\d{9}$") String phone,

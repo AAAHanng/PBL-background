@@ -1,8 +1,5 @@
 package com.pbl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.pbl.entity.dto.Account;
-import com.pbl.mapper.AccountMapper;
 import com.pbl.service.AccountService;
 import com.pbl.service.CourseService;
 import jakarta.annotation.Resource;
@@ -17,11 +14,11 @@ class PblApplicationTests {
     AccountService service;
 
     @Resource
-    CourseService service1;
+    CourseService courseService;
 
     @Test
     void contextLoads() {
-        service.findAccountByNameOrEmail("2021402030601");
+        courseService.getCoursesForStudents();
     }
 
     @Test
@@ -30,8 +27,5 @@ class PblApplicationTests {
     }
 
 
-    @Test
-    void datasourceCourse(){
-        System.out.println(service1.getStudentCourseInfoByStudentID("2021402030609",1));
-    }
+
 }
