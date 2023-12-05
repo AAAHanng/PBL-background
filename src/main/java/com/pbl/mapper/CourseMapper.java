@@ -14,15 +14,11 @@ import java.util.Map;
 public interface CourseMapper extends BaseMapper<Course> {
 
 
-        @Select("SELECT Course.courseid ,Course.teacher, Course.coursename, Course.coursetime, Course.location, User.classes " +
-                "FROM Course " +
-                "LEFT JOIN Enrollment ON Course.CourseID = Enrollment.CourseID " +
-                "LEFT JOIN User ON Enrollment.StudentID = User.studentID " +
-                "WHERE User.Identification = 1")
+        @Select("SELECT * FROM Course")
 
         List<Map<String, Object>> getCoursesForStudents();
 
-        @Select("SELECT coursename, coursetime, location, maxcapacity, description FROM Course WHERE teacher = #{teacher}")
+        @Select("SELECT courseid, coursename, coursetime, location, maxcapacity, description FROM Course WHERE teacherID = #{teacher}")
         List<Map<String, Object>> getCourseByName(@Param("teacher") String teacher);
 
         @Select("SELECT User.studentID, User.username, User.college, User.classes , Course.coursename " +
@@ -36,22 +32,17 @@ public interface CourseMapper extends BaseMapper<Course> {
         int updateCourseDescription(@Param("courseId") String courseId, @Param("description") String description);
 
 
-        @Select("SELECT U.username, U.studentID, U.classes, C.coursename, C.courseid, E.Status " +
-                "FROM User U " +
-                "JOIN (" +
-                "   SELECT EC.StudentID, EC.CourseID, EC.Status " +
-                "   FROM (" +
-                "       SELECT E.StudentID, E.CourseID, E.Status " +
-                "       FROM Enrollment E " +
-                "       WHERE E.courseID IN (" +
-                "           SELECT CourseID " +
-                "           FROM Enrollment " +
-                "           WHERE studentID = #{studentID}" +
-                "       )" +
-                "   ) AS EC" +
-                ") AS E ON U.studentID = E.StudentID " +
-                "JOIN Course C ON E.CourseID = C.CourseID " +
-                "WHERE U.identification = 1")
+        @Select("SELECT " +
+                "U.username, " +
+                "U.studentID, " +
+                "U.classes, " +
+                "C.coursename, " +
+                "C.courseid, " +
+                "E.Status " +
+                "FROM Course C " +
+                "JOIN Enrollment E ON C.courseid = E.courseid " +
+                "JOIN User U ON E.studentid = U.studentID " +
+                "WHERE C.teacherID = #{studentId}")
         List<Map<String, Object>> getUserCoursesWithStudentId(String studentID);
 
         @Select("SELECT " +

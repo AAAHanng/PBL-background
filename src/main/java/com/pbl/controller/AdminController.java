@@ -36,7 +36,7 @@ public class AdminController {
     })
     @Operation(summary = "增加课程")   //接口功能描述
     @ResponseBody
-    @GetMapping("/createCourse")
+    @PostMapping("/createCourse")
     public RestBean<String> createCourse(@RequestBody Course course){
         System.out.println(course);
         return RestBean.success(courseService.createCourse(course));

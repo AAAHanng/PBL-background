@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,7 +67,7 @@ public class CourseController {
     })
     @Operation(summary = "发送课程请求")   //接口功能描述
     @ResponseBody
-    @GetMapping("/CourseRequest")
+    @PostMapping("/CourseRequest")
     public RestBean<String> submitCourseRequest(String courseID , String StudentID){
         return RestBean.success(service.submitCourseRequest(courseID,StudentID));
     }

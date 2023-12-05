@@ -18,7 +18,7 @@ class PblApplicationTests {
 
     @Test
     void contextLoads() {
-        courseService.getCoursesForStudents();
+        courseService.getRequestList("2021402030615");
     }
 
     @Test

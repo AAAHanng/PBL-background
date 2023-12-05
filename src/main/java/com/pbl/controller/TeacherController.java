@@ -1,16 +1,18 @@
 package com.pbl.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.pbl.entity.dto.Course;
 import com.pbl.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.metadata.HsqlTableMetaDataProvider;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ public class TeacherController {
     @Resource
     CourseService courseService;
 
+
     /**
      * 老师确定收到学生的选课列表
      *
@@ -36,7 +39,7 @@ public class TeacherController {
     })
     @Operation(summary = "老师确定收到学生的选课列表",description = "type")   //接口功能描述
     @ResponseBody
-    @GetMapping("/CourseRequest")
+    @PostMapping("/CourseRequest")
     public List<Map<String, Object>> TeacherClassList(String courseID , String type){
         return courseService.TeacherClassList(courseID,type);
     }
@@ -57,4 +60,5 @@ public class TeacherController {
     public String TeacherChange(String studentID, String courseID , String type){
         return courseService.TeacherChange(studentID,courseID,type);
     }
+
 }

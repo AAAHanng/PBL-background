@@ -3,12 +3,14 @@ package com.pbl.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.pbl.entity.dto.Course;
 import com.pbl.entity.dto.Enrollment;
 import com.pbl.mapper.CourseMapper;
 import com.pbl.mapper.EnrollmentMapper;
 import com.pbl.service.CourseService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,6 +146,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     @Override
     public String createCourse(Course course) {
         try {
+            Course course1 = new Course();
+            BeanUtils.copyProperties(course,course1);
+            course1.setTeacherID("2021402030615");
+            this.save(course1);
+            course.setTeacherID("2021402030616");
             this.save(course);
             return "课程创建成功";
         } catch (Exception e) {
