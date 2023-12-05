@@ -2,6 +2,7 @@ package com.pbl.entity;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.pbl.entity.dto.Student;
 
 public record RestBean<T> (int code, T data, String message) {
 

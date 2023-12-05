@@ -1,20 +1,18 @@
 package com.pbl.configuration;
 
 import com.pbl.entity.RestBean;
-import com.pbl.entity.dto.Account;
+import com.pbl.entity.dto.Student;
 import com.pbl.entity.vo.response.AuthorizeVO;
 import com.pbl.filter.JwtAuthenticationFilter;
-import com.pbl.service.AccountService;
+import com.pbl.service.StudentService;
 import com.pbl.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.filters.RequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,8 +36,8 @@ public class SecurityConfiguration {
         /*
         *   这是User的接口
         *  */
-        @Autowired
-        private AccountService service;
+        @Resource
+        private StudentService service;
 
         @Resource
         JwtUtils utils;
@@ -115,15 +113,15 @@ public class SecurityConfiguration {
                 //如果 exceptionOrAuthentication 是 Exception 类型的异常（泛指其他异常），则返回一个包含未授权信息的JSON响应
             } else if(exceptionOrAuthentication instanceof Authentication authentication){
                 User user = (User) authentication.getPrincipal();
-                Account account = service.findAccountByNameOrEmail(user.getUsername());
-                String jwt = utils.createJwt(user, account.getUsername(), account.getUserID());
+                Student student = service.findAccountByNameOrEmail(user.getUsername());
+                String jwt = utils.createJwt(user, student.getUserName(), student.getUserID());
                 if(jwt == null) {
                     writer.write(RestBean.forbidden("登录验证频繁，请稍后再试").asJsonString());
                 } else {
                     AuthorizeVO vo = new AuthorizeVO();
                     vo.setExpire(utils.expireTime());
                     vo.setToken(jwt);
-                    vo.setUsername(account.getUsername());
+                    vo.setUsername(student.getUserName());
                     writer.write(RestBean.success(vo).asJsonString());
                 }
             }

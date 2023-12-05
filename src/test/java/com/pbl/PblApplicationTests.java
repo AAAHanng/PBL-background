@@ -1,33 +1,34 @@
 package com.pbl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.pbl.entity.dto.Account;
-import com.pbl.mapper.AccountMapper;
-import com.pbl.service.AccountService;
+
+import com.pbl.service.StudentService;
 import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.sql.DataSource;
 
 @SpringBootTest
 class PblApplicationTests {
 
     @Resource
-    AccountService service;
+    StudentService studentService;
 
-    @Test
-    void contextLoads() {
-        service.findAccountByNameOrEmail("JohnDoe");
-    }
+    @Resource
+    DataSource source;
 
     @Test
     void encoded(){
         System.out.println(new BCryptPasswordEncoder().encode("123456"));
     }
 
+
     @Test
-    void datasource(){
-        System.out.println(service.findAccountByStudentID("2021402030611"));
+    void student(){
+        studentService.updateInfo("2021402030602","1","1","1","1","1");
     }
+
 
 }
