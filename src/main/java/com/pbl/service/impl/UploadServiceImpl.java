@@ -6,10 +6,16 @@ import com.pbl.entity.dto.UpdateFile;
 import com.pbl.mapper.FileMapper;
 import com.pbl.service.UploadService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -18,7 +24,6 @@ import java.util.UUID;
 public class UploadServiceImpl extends ServiceImpl<FileMapper, UpdateFile> implements UploadService {
 
     @Value("${spring.servlet.sava}")
-
     private String savaFile;
 
     @Override
@@ -69,5 +74,25 @@ public class UploadServiceImpl extends ServiceImpl<FileMapper, UpdateFile> imple
                 .setTotalSize(String.valueOf(file.getSize()+"bytes"));
         save(uploadEntity);
         return true;
+    }
+
+    @Override
+    public ResponseEntity<Object> downloadFile(String fileName) {
+        try {
+            Path filePath = Paths.get(savaFile, fileName);
+            System.out.println(filePath);
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + resource.getFilename())
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }
