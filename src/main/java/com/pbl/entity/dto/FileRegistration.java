@@ -3,7 +3,10 @@ package com.pbl.entity.dto;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -15,8 +18,11 @@ import java.io.Serializable;
  * @since 2023-12-05
  */
 @TableName("FileRegistration")
+@Accessors(chain = true)
+@Data
 public class FileRegistration implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -45,54 +51,4 @@ public class FileRegistration implements Serializable {
      */
     private String status;
 
-    public Integer getRegistrationID() {
-        return registrationID;
-    }
-
-    public void setRegistrationID(Integer registrationID) {
-        this.registrationID = registrationID;
-    }
-
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
-
-    public String getTeacherID() {
-        return teacherID;
-    }
-
-    public void setTeacherID(String teacherID) {
-        this.teacherID = teacherID;
-    }
-
-    public Integer getFileID() {
-        return fileID;
-    }
-
-    public void setFileID(Integer fileID) {
-        this.fileID = fileID;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "FileRegistration{" +
-        "registrationID = " + registrationID +
-        ", studentID = " + studentID +
-        ", teacherID = " + teacherID +
-        ", fileID = " + fileID +
-        ", status = " + status +
-        "}";
-    }
 }

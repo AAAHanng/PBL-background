@@ -1,7 +1,7 @@
 package com.pbl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.pbl.entity.dto.File;
+import com.pbl.entity.dto.UpdateFile;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023-12-05
  */
 @Mapper
-public interface FileMapper extends BaseMapper<File> {
+public interface FileMapper extends BaseMapper<UpdateFile> {
 
 }
