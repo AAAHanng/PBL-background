@@ -1,6 +1,7 @@
 package com.pbl.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pbl.entity.dto.CourseRegistration;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2023-12-05
  */
 @Mapper
-public interface CourseRegistrationMapper extends BaseMapper<CourseRegistrationMapper> {
+public interface CourseRegistrationMapper extends BaseMapper<CourseRegistration> {
 
 }

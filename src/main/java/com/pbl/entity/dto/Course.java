@@ -2,7 +2,10 @@ package com.pbl.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,8 +17,11 @@ import java.time.LocalDateTime;
  * @author AAAHang
  * @since 2023-12-05
  */
+@AllArgsConstructor
+@Data
 public class Course implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -64,78 +70,7 @@ public class Course implements Serializable {
      */
     private String teacher;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public LocalDateTime getCourseTime() {
-        return courseTime;
-    }
-
-    public void setCourseTime(LocalDateTime courseTime) {
-        this.courseTime = courseTime;
-    }
-
-    public Integer getMaxCapacity() {
-        return maxCapacity;
-    }
-
-    public void setMaxCapacity(Integer maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getCredits() {
-        return credits;
-    }
-
-    public void setCredits(Integer credits) {
-        this.credits = credits;
-    }
-
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
+    private String classes;
     @Override
     public String toString() {
         return "Course{" +

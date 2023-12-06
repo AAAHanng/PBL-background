@@ -2,6 +2,7 @@ package com.pbl.controller;
 
 
 import com.pbl.entity.RestBean;
+import com.pbl.entity.dto.Course;
 import com.pbl.entity.dto.Student;
 import com.pbl.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/student")
@@ -57,4 +61,51 @@ public class StudentController {
         return RestBean.success(data);
     }
 
+    /**
+     * 学生发送请求课程
+     * @param //request 请求学号 老师工号 课程号
+     * @return AccountVO对象
+     */
+    @Operation(summary = "学生发送请求课程  请求学号 老师工号 课程号" )   //接口功能描述
+    @ResponseBody
+    @PostMapping("putCourseRequest")
+    public RestBean<String> putCourseRequest(@RequestParam String studentId,
+                                              @RequestParam String teacherId,
+                                              @RequestParam String courseId
+    ) {
+        String data = studentService.putCourseRequest(studentId,teacherId,courseId);
+        return RestBean.success(data);
+    }
+
+    /**
+     * 学生返回可以选的课
+     * @param //request 请求学号
+     * @return AccountVO对象
+     */
+    @Operation(summary = "学生返回可以选的课" )   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getAllCourse")
+    public RestBean<List<Map<String,Object>>> getAllCourse() {
+        return RestBean.success(studentService.getAllCourse());
+    }
+
+    /**
+     * 学生根据学号 关联CourseRegistration 得到学生学号 学号再去User表查询
+     *
+     * @param //request 请求工号
+     * @return RestBean
+     */
+    @Operation(summary = "学生根据学号 查询有哪些人选了课", description =
+            "type参数为1 返回该学生等待选课的列表 ，" +
+                    "type参数为2 返回该学生已经选课的列表，" +
+                    "type参数0 默认返回该是学生所有 列表 ")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getStudentClassListByStudentID")
+    public RestBean<List<Map<String, Object>>> getStudentClassListByStudentID(@RequestParam(name = "studentId") String studentId,
+                                                                   @RequestParam(required = false) int type
+    ) {
+        List<Map<String, Object>> data = studentService.getTeacherClassList(studentId, type);
+        if (data == null) return RestBean.failure(400, "没有该用户");
+        return RestBean.success(data);
+    }
 }
