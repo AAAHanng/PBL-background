@@ -9,7 +9,7 @@ spring:
       enabled: true
       max-file-size: 100MB
       max-request-size: 100MB
-    sava: "/Users/liuhang/Desktop/文件测试"
+    sava: "/Users/liuhang/Desktop/PBL V2.0/src/main/resources/static"
   security:
     jwt:
       key: 'abcdefghijklmn'
