@@ -1,6 +1,7 @@
 package com.pbl.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,11 +34,13 @@ public class Course implements Serializable {
     /**
      * 课程ID，唯一标示
      */
+    @TableField("courseId")
     private String courseId;
 
     /**
      * 课程名称
      */
+    @TableField("courseName")
     private String courseName;
 
     /**
@@ -48,16 +51,19 @@ public class Course implements Serializable {
     /**
      * 课程时间
      */
-    private LocalDateTime courseTime;
+    @TableField("courseTime")
+    private String courseTime;
 
     /**
      * 课程人数上限
      */
+    @TableField("maxCapacity")
     private Integer maxCapacity;
 
     /**
      * 课程简介
      */
+
     private String description;
 
     /**
