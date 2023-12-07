@@ -32,8 +32,8 @@ public class UpdateFile implements Serializable {
     /**
      * 文件ID，唯一标示
      */
-    @TableField("courseId")
-    private String courseId;
+    @TableField("fileId")
+    private String fileId;
 
     /**
      * 文件本身的名字
@@ -69,5 +69,7 @@ public class UpdateFile implements Serializable {
      */
     @TableField("uploadTime")
     private String uploadTime;
+
+
 
 }

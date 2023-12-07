@@ -2,17 +2,18 @@ package com.pbl.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.pbl.entity.dto.Course;
 import com.pbl.entity.dto.Student;
-import com.pbl.entity.vo.response.AccountVO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Map;
 
 public interface StudentService extends IService<Student>, UserDetailsService {
-    Student findAccountByNameOrEmail(String text);
 
+
+    String addStudent(Student student);
+
+    Student findAccountByNameOrEmail(String text);
 
     String updateInfo(String studentID, String phone, String email, String wechat, String qq, String bio);
 
@@ -23,4 +24,10 @@ public interface StudentService extends IService<Student>, UserDetailsService {
     List<Map<String,Object>> getAllCourse();
 
     List<Map<String, Object>> getTeacherClassList(String teacherId, int type);
+
+    String deleteStudent(String studentId);
+
+    String updateStudent(Student student);
+
+    List<Student> getStudent();
 }

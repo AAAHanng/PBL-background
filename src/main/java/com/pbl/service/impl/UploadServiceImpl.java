@@ -66,8 +66,6 @@ public class UploadServiceImpl extends ServiceImpl<FileMapper, UpdateFile> imple
         UpdateFile uploadEntity = new UpdateFile()
                 .setUploadTime(datePath)
                 .setType(imgSuffix)
-                .setCourseId(params.getCourseId())
-                .setUserId(params.getCourseId())
                 .setFileName(params.getFileName())
                 .setSaveFileName(saveFileName)
                 .setUuId(uuId)

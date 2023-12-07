@@ -1,6 +1,7 @@
 package com.pbl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pbl.entity.dto.CourseRegistration;
 import com.pbl.entity.dto.Teacher;
@@ -25,6 +26,12 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
 
     @Resource
     CourseRegistrationMapper courseRegistrationMapper;
+
+    public Teacher findAccountByNameOrEmail(String text){
+        return this.query()
+                .eq("teacherId", text).or()
+                .one();
+    }
 
     @Override
     public String updateInfo(String teacherId, String phone, String email, String wechat, String qq, String bio) {
@@ -100,5 +107,43 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
             System.err.println("错误删除: " + e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public String addTeacher(Teacher teacher) {
+        try {
+            this.save(teacher);
+            return "学生创建成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程创建失败，可能出现错误：";
+        }
+    }
+
+    @Override
+    public String deleteTeacher(String teacherId) {
+        try {
+            this.removeById(teacherId);
+            return "课程删除成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程删除失败，可能出现错误：" ;
+        }
+    }
+
+    @Override
+    public String updateStudent(Teacher student) {
+        try {
+            this.updateById(student);
+            return "课程更新成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程更新失败，可能出现错误：";
+        }
+    }
+
+    @Override
+    public List<Teacher> getTeacher() {
+        return teacherMapper.selectList(Wrappers.emptyWrapper());
     }
 }

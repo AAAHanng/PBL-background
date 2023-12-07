@@ -3,14 +3,10 @@ package com.pbl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.pbl.entity.dto.Course;
-import com.pbl.entity.dto.CourseRegistration;
-import com.pbl.entity.dto.Student;
-import com.pbl.entity.vo.response.AccountVO;
-import com.pbl.mapper.CourseMapper;
-import com.pbl.mapper.CourseRegistrationMapper;
-import com.pbl.mapper.StudentMapper;
+import com.pbl.entity.dto.*;
+import com.pbl.mapper.*;
 import com.pbl.service.StudentService;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.User;
@@ -18,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,8 +21,10 @@ import java.util.stream.Collectors;
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
 
+
     @Resource
     StudentMapper studentMapper;
+
 
     @Resource
     CourseRegistrationMapper courseRegistrationMapper;
@@ -36,14 +32,18 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Resource
     CourseMapper courseMapper;
 
+
     /**
      * 从数据库中通过用户名或邮箱查找用户详细信息
      * @param username 用户名
      * @return 用户详细信息
      * @throws UsernameNotFoundException 如果用户未找到则抛出此异常
      */
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         Student student= this.findAccountByNameOrEmail(username);
         if(student == null)
             throw new UsernameNotFoundException("用户名或密码错误");
@@ -53,8 +53,21 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 .build();
     }
 
+
+    @Override
+    public String addStudent(Student student) {
+        try {
+            this.save(student);
+            return "学生创建成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程创建失败，可能出现错误：";
+        }
+    }
+
     /**
      * 通过查找用户
+     *
      * @param text 用户名
      * @return 账户实体
      */
@@ -63,6 +76,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 .eq("studentId", text).or()
                 .one();
     }
+
 
     @Override
     public String updateInfo(String studentID, String phone, String email, String wechat, String qq, String bio) {
@@ -128,6 +142,33 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String deleteStudent(String studentId) {
+        try {
+            this.removeById(studentId);
+            return "课程删除成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程删除失败，可能出现错误：" ;
+        }
+    }
+
+    @Override
+    public String updateStudent(Student student) {
+        try {
+            this.updateById(student);
+            return "课程更新成功";
+        } catch (Exception e) {
+            e.printStackTrace(); // 记录日志
+            return "课程更新失败，可能出现错误：";
+        }
+    }
+
+    @Override
+    public List<Student> getStudent() {
+        return studentMapper.selectList(Wrappers.emptyWrapper());
+    }
+
     /**
      * 查看数据是否存在
      * @param // Studentid courseid
@@ -141,6 +182,8 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         CourseRegistration result = courseRegistrationMapper.selectOne(selectWrapper);
         return result != null;
     }
+
+
 }
 
 

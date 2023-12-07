@@ -1,10 +1,14 @@
 package com.pbl.configuration;
 
 import com.pbl.entity.RestBean;
+import com.pbl.entity.dto.Admin;
 import com.pbl.entity.dto.Student;
+import com.pbl.entity.dto.Teacher;
 import com.pbl.entity.vo.response.AuthorizeVO;
 import com.pbl.filter.JwtAuthenticationFilter;
+import com.pbl.service.AdminService;
 import com.pbl.service.StudentService;
+import com.pbl.service.TeacherService;
 import com.pbl.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +41,13 @@ public class SecurityConfiguration {
         *   这是User的接口
         *  */
         @Resource
-        private StudentService service;
+        private StudentService studentservice;
+
+        @Resource
+        private AdminService adminService;
+
+        @Resource
+        private TeacherService teacherService;
 
         @Resource
         JwtUtils utils;
@@ -114,7 +124,8 @@ public class SecurityConfiguration {
                 //如果 exceptionOrAuthentication 是 Exception 类型的异常（泛指其他异常），则返回一个包含未授权信息的JSON响应
             } else if(exceptionOrAuthentication instanceof Authentication authentication){
                 User user = (User) authentication.getPrincipal();
-                Student student = service.findAccountByNameOrEmail(user.getUsername());
+                System.out.println(user);
+                Student student = studentservice.findAccountByNameOrEmail(user.getUsername());
                 String jwt = utils.createJwt(user, student.getUserName(), student.getUserID());
                 if(jwt == null) {
                     writer.write(RestBean.forbidden("登录验证频繁，请稍后再试").asJsonString());
@@ -123,6 +134,7 @@ public class SecurityConfiguration {
                     vo.setExpire(utils.expireTime());
                     vo.setToken(jwt);
                     vo.setUsername(student.getUserName());
+                    vo.setIdentity(user.getAuthorities().toString());
                     writer.write(RestBean.success(vo).asJsonString());
                 }
             }
@@ -147,4 +159,6 @@ public class SecurityConfiguration {
         }
         writer.write(RestBean.failure(400, "退出登录失败").asJsonString());
     }
+
+
 }

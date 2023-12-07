@@ -2,8 +2,10 @@ package com.pbl.controller;
 
 
 import com.pbl.entity.RestBean;
+import com.pbl.entity.dto.HomeWork;
 import com.pbl.entity.dto.Student;
 import com.pbl.entity.dto.Teacher;
+import com.pbl.service.HomeWorkService;
 import com.pbl.service.TeacherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +26,9 @@ public class TeacherController {
 
     @Resource
     TeacherService teacherService;
+
+    @Resource
+    HomeWorkService homeWorkService;
 
     /**
      * 用户根据工号来修改信息
@@ -139,5 +144,76 @@ public class TeacherController {
         // 调用服务类的方法获取数据
         String data = teacherService.updateClassStatus(teacherId, courseId, type,studentId);
         return RestBean.success(data);
+    }
+
+    /**
+     * 给指定一个课程布置一项作业
+     *
+     * @param //request 请求工号 课程Id 班级id 作业名字 作业描述
+     * @return RestBean
+     */
+    @Operation(summary = "请求工号 课程Id 班级id 作业名字 作业描述   返回是否成功")   //接口功能描述
+    @ResponseBody
+    @PutMapping("/putHomeWork")
+    public RestBean<String> putHomeWork(
+            @RequestParam(name = "teacherId") String teacherId,
+            @RequestParam(name = "courseId") String courseId,
+            @RequestParam(name = "classId") String classId,
+            @RequestParam(name = "homeWorkName") String homeWorkName,
+            @RequestParam(name = "description") String description
+    ) {
+        // 调用服务类的方法获取数据
+        String data = homeWorkService.putHomeWork(teacherId, courseId, classId,homeWorkName,description);
+        return RestBean.success(data);
+    }
+
+
+    /**
+     * 通过老师id和课程id查询下面布置的作业
+     *
+     * @param //request 请求工号 课程Id
+     * @return RestBean
+     */
+    @Operation(summary = "请求工号 课程Id 查询下面布置的作业  返回实体类")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getHomeWorkByTeacherIdAndClassID")
+    public RestBean<List<HomeWork>> getHomeWorkByTeacherIdAndClassID(
+            @RequestParam(name = "teacherId") String teacherId,
+            @RequestParam(name = "courseId") String courseId
+    ) {
+        List<HomeWork> data=  homeWorkService.getHomeWorkByTeacherIdAndClassID(teacherId, courseId);
+        return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
+    }
+
+    /**
+     * 通过老师id和课程id 还有作业id查询有那些作业
+     *
+     * @param //request 请求工号 课程Id
+     * @return RestBean
+     */
+    @Operation(summary = "可以直接通过 作业id查询有那些作业 ps(不小心设为唯一值了) ")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getHomeWorkByCourseId")
+    public RestBean<HomeWork> getHomeWorkByTeacherIdAndClassID(
+            @RequestParam(name = "homeWorkId") String homeWorkId
+    ) {
+        HomeWork data=  homeWorkService.getHomeWorkByTeacherIdAndClassIDAndCourseId(homeWorkId);
+        return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
+    }
+
+    /**
+     * 通过作业id批改分数
+     * @param //request 请求工号 课程Id
+     * @return RestBean
+     */
+    @Operation(summary = "可以直接通过 作业id批改分数 ps(不小心设为唯一值了)  返回是否成功")   //接口功能描述
+    @ResponseBody
+    @PutMapping("/updateHomWorkGrade")
+    public RestBean<String> updateHomWorkGrade(
+            @RequestParam(name = "homeWorkId") String homeWorkId,
+            @RequestParam(name = "Grade") String Grade
+    ) {
+        String data=  homeWorkService.updateHomWorkGrade(homeWorkId,Grade);
+        return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
     }
 }
