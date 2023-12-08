@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface TeacherService extends IService<Teacher>{
 
-    Teacher findAccountByNameOrEmail(String text);
+    Teacher findTeacherByNameOrEmail(String text);
     String updateInfo(String teacherId, String phone, String email, String wechat, String qq, String bio);
 
     Teacher getContactByStudentID(String teacherId);
@@ -28,4 +28,6 @@ public interface TeacherService extends IService<Teacher>{
     String updateStudent(Teacher student);
 
     List<Teacher> getTeacher();
+
+    String getCourseAndClassesAndHomeWorkName(String studentId);
 }

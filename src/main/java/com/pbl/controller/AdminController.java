@@ -135,7 +135,7 @@ public class AdminController {
      */
     @Operation(summary = "管理员 账号管理 学生 删除" )   //接口功能描述
     @ResponseBody
-    @PutMapping("/deleteStudent")
+    @GetMapping("/deleteStudent")
     public RestBean<String> deleteStudent(@RequestBody String studentId) {
         // 调用服务类的方法获取数据
         String data = studentService.deleteStudent(studentId);

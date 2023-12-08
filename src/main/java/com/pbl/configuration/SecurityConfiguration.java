@@ -13,10 +13,13 @@ import com.pbl.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -35,6 +38,7 @@ import java.io.PrintWriter;
 */
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfiguration {
 
         /*
@@ -75,8 +79,9 @@ public class SecurityConfiguration {
                     .authorizeHttpRequests(conf -> conf
                             .requestMatchers("/api/auth/**" ,"/error").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                            .requestMatchers("/api/file/**").permitAll()
+                            .requestMatchers("/**").permitAll()
                             .anyRequest().authenticated()
+
                     )
                     .formLogin(conf -> conf
                             .loginProcessingUrl("/api/auth/login")
@@ -97,6 +102,7 @@ public class SecurityConfiguration {
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
+
         }
 
         /**
@@ -124,8 +130,8 @@ public class SecurityConfiguration {
                 //如果 exceptionOrAuthentication 是 Exception 类型的异常（泛指其他异常），则返回一个包含未授权信息的JSON响应
             } else if(exceptionOrAuthentication instanceof Authentication authentication){
                 User user = (User) authentication.getPrincipal();
-                System.out.println(user);
-                Student student = studentservice.findAccountByNameOrEmail(user.getUsername());
+                System.out.println(user.getUsername());
+                Teacher student = teacherService.findTeacherByNameOrEmail(user.getUsername());
                 String jwt = utils.createJwt(user, student.getUserName(), student.getUserID());
                 if(jwt == null) {
                     writer.write(RestBean.forbidden("登录验证频繁，请稍后再试").asJsonString());
@@ -134,7 +140,7 @@ public class SecurityConfiguration {
                     vo.setExpire(utils.expireTime());
                     vo.setToken(jwt);
                     vo.setUsername(student.getUserName());
-                    vo.setIdentity(user.getAuthorities().toString());
+                    vo.setIdentity(user.getAuthorities() .toString());
                     writer.write(RestBean.success(vo).asJsonString());
                 }
             }

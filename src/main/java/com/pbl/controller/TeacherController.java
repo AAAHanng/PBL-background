@@ -37,7 +37,7 @@ public class TeacherController {
      * @return RestBean 对象
      */
     @Operation(summary = "更新用户联系信息 根据工号(ps 修改老师的个人信息)", description = "更新用户的手机、邮件、微信和 QQ 号 ")
-    @PutMapping("/updateInfo")
+    @PostMapping("/updateInfo")
     public RestBean<Void> updateContactInfo(
             @RequestParam(name = "teacherId") String teacherId,
             @RequestParam(name = "phone", required = false) @Pattern(regexp = "^1[3456789]\\d{9}$") String phone,
@@ -154,7 +154,7 @@ public class TeacherController {
      */
     @Operation(summary = "请求工号 课程Id 班级id 作业名字 作业描述   返回是否成功")   //接口功能描述
     @ResponseBody
-    @PutMapping("/putHomeWork")
+    @PostMapping("/putHomeWork")
     public RestBean<String> putHomeWork(
             @RequestParam(name = "teacherId") String teacherId,
             @RequestParam(name = "courseId") String courseId,
@@ -216,4 +216,22 @@ public class TeacherController {
         String data=  homeWorkService.updateHomWorkGrade(homeWorkId,Grade);
         return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
     }
+
+    /**
+     * 通过老师工号
+     * @param //request 请求工号 课程Id
+     * @return RestBean
+     */
+    @Operation(summary = "通过老师工号  返回课程名字 班级名 作业标题")   //接口功能描述
+    @ResponseBody
+    @GetMapping("/getCourseAndClassesAndHomeWorkName")
+    public RestBean<String> getCourseAndClassesAndHomeWorkName(
+            @RequestParam(name = "studentId") String studentId
+    ) {
+        String data=  teacherService.getCourseAndClassesAndHomeWorkName(studentId);
+        return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
+    }
+
+
+
 }

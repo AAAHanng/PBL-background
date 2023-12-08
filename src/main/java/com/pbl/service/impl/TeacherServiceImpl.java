@@ -1,8 +1,11 @@
 package com.pbl.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.pbl.entity.dto.ClassRegistration;
+import com.pbl.entity.dto.Course;
 import com.pbl.entity.dto.CourseRegistration;
 import com.pbl.entity.dto.Teacher;
 import com.pbl.mapper.CourseRegistrationMapper;
@@ -27,10 +30,13 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
     @Resource
     CourseRegistrationMapper courseRegistrationMapper;
 
-    public Teacher findAccountByNameOrEmail(String text){
-        return this.query()
-                .eq("teacherId", text).or()
-                .one();
+    @Resource
+
+
+    public Teacher findTeacherByNameOrEmail(String text){
+        QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teacherId",text);
+        return teacherMapper.selectOne(queryWrapper);
     }
 
     @Override
@@ -145,5 +151,10 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
     @Override
     public List<Teacher> getTeacher() {
         return teacherMapper.selectList(Wrappers.emptyWrapper());
+    }
+
+    @Override
+    public String getCourseAndClassesAndHomeWorkName(String studentId) {
+        return courseRegistrationMapper.getCourseAndHomeWorkName(studentId);
     }
 }

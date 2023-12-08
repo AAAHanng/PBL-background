@@ -36,7 +36,7 @@ class PblApplicationTests {
 
     @Test
     void studentdemo(){
-        teacherService.getTeacherClassList("2021402030611",0);
+        teacherService.findTeacherByNameOrEmail("2021402030611");
     }
 
 

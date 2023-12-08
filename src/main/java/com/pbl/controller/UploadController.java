@@ -3,6 +3,7 @@ package com.pbl.controller;
 import com.pbl.entity.RestBean;
 import com.pbl.entity.dto.UpdateFile;
 import com.pbl.service.UploadService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/file")
+@Tag(name="文件接口",description = "这些接口是服务老师")
 public class UploadController {
 
     @Resource
