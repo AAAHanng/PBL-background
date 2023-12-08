@@ -145,8 +145,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public String deleteStudent(String studentId) {
         try {
-            this.removeById(studentId);
-            return "课程删除成功";
+            QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("studentId",studentId);
+            courseMapper.delete(queryWrapper);
+            return "删除成功";
         } catch (Exception e) {
             e.printStackTrace(); // 记录日志
             return "课程删除失败，可能出现错误：" ;

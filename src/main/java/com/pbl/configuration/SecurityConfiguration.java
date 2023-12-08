@@ -131,7 +131,7 @@ public class SecurityConfiguration {
             } else if(exceptionOrAuthentication instanceof Authentication authentication){
                 User user = (User) authentication.getPrincipal();
                 System.out.println(user.getUsername());
-                Teacher student = teacherService.findTeacherByNameOrEmail(user.getUsername());
+                Student student = studentservice.findAccountByNameOrEmail(user.getUsername());
                 String jwt = utils.createJwt(user, student.getUserName(), student.getUserID());
                 if(jwt == null) {
                     writer.write(RestBean.forbidden("登录验证频繁，请稍后再试").asJsonString());

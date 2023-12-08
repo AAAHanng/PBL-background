@@ -154,7 +154,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
     }
 
     @Override
-    public String getCourseAndClassesAndHomeWorkName(String studentId) {
+    public List<Map<String,Object>>  getCourseAndClassesAndHomeWorkName(String studentId) {
         return courseRegistrationMapper.getCourseAndHomeWorkName(studentId);
     }
 }

@@ -29,5 +29,5 @@ public interface TeacherService extends IService<Teacher>{
 
     List<Teacher> getTeacher();
 
-    String getCourseAndClassesAndHomeWorkName(String studentId);
+    List<Map<String,Object>>  getCourseAndClassesAndHomeWorkName(String studentId);
 }

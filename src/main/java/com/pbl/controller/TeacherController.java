@@ -225,10 +225,10 @@ public class TeacherController {
     @Operation(summary = "通过老师工号  返回课程名字 班级名 作业标题")   //接口功能描述
     @ResponseBody
     @GetMapping("/getCourseAndClassesAndHomeWorkName")
-    public RestBean<String> getCourseAndClassesAndHomeWorkName(
+    public RestBean<List<Map<String,Object>> > getCourseAndClassesAndHomeWorkName(
             @RequestParam(name = "studentId") String studentId
     ) {
-        String data=  teacherService.getCourseAndClassesAndHomeWorkName(studentId);
+        List<Map<String,Object>>  data=  teacherService.getCourseAndClassesAndHomeWorkName(studentId);
         return (data == null) ? RestBean.failure(400,"没找到该用户") : RestBean.success(data);
     }
 
