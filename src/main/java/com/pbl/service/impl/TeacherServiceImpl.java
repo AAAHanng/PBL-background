@@ -30,7 +30,6 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper , Teacher> imp
     @Resource
     CourseRegistrationMapper courseRegistrationMapper;
 
-    @Resource
 
 
     public Teacher findTeacherByNameOrEmail(String text){

@@ -20,6 +20,9 @@ import java.util.Map;
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
 
-    @Select("SELECT * FROM Course")
+    @Select("SELECT c.*, cr.Status AS RegistrationStatus, ct.TeacherID " +
+            "FROM Course c " +
+            "LEFT JOIN CourseRegistration cr ON c.CourseID = cr.CourseID " +
+            "LEFT JOIN CourseTeacher ct ON c.CourseID = ct.CourseID")
     List<Map<String,Object>> getAllCourse();
 }
